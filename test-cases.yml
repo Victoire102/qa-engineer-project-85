@@ -5,6 +5,7 @@
       Пользователь должен иметь возможность регистрации на сайте через электронную почту
     prerequisites: 
       Открыт сайт https://codebattle.hexlet.io
+      Пользователь не создавал учетную запись
     test-data: |
        Nickname = Victoire_102
        Email = a200287@yandex.ru
@@ -16,6 +17,23 @@
       - Нажать "Submit"
     expected-result: |
         Пользователь успешно зарегистрирован и попадает на страницу https://codebattle.hexlet.io/#lobby
+
+  - summary: |
+      Проверка авторизации через электронную почту 
+    requirement: |
+      Успешная авторизация пользователя при введении валидных данных
+    prerequisites: 
+      Открыт сайт https://codebattle.hexlet.io
+      Учетная запись пользователя создана
+    test-data: |
+       Email = a200287@yandex.ru
+       Password = 1234567890
+    steps:
+      - Нажать "Sign in"
+      - Ввести тестовые данные в поля формы авторизации 
+      - Нажать "Submit"
+    expected-result: |
+        Пользователь успешно авторизован и попадает на страницу https://codebattle.hexlet.io/#lobby
 
   - summary: |
       Проверка авторизации через GitHub
