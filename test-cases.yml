@@ -36,6 +36,22 @@
         Пользователь успешно авторизован и попадает на страницу https://codebattle.hexlet.io/#lobby
 
   - summary: |
+      Проверка авторизации с невалидными данными
+    requirement: |
+      Пользователь не должен авторизоваться на сайте
+    prerequisites: |
+      Открыт сайт https://codebattle.hexlet.io
+      Учетная запись пользователя создана
+    test-data: |
+       Incorrect email = aa200287@yandex.ru
+       Password = 1234567890
+    steps:
+      - Ввести несуществующий E-mail
+      - Ввести Password
+    expected-result: |
+        Пользователь не авторизован. Ошибка авторизации отображается в виде строки «EMAIL_NOT_FOUND».
+
+  - summary: |
       Проверка авторизации через GitHub
     requirement: |
       Пользователь должен иметь возможность регистрации на сайте через GitHub
@@ -61,10 +77,65 @@
        Соперник - бот
     steps:
       - Нажать "Create a game"
+      - Выбрать сложность игры в поле "Level"
       - Нажать "With a bot" в поле "Game Type"
+      - Выбрать продолжительность игры в поле "Time control"
+      - Выбрать задачу в поле "Choose task by name or tags"
       - Нажать "Create battle"
     expected-result: |
       Игра создана, Пользователь переходит на страницу игры с ботом
+
+  - summary: |
+      Проверка правильности решения во время игры с ботом
+    requirement: |
+      Пользователь должен иметь возможность проверить правильность решения задачи во время игры с ботом
+    prerequisites: 
+      Пользователь авторизован в приложении
+      Открыта страница https://codebattle.hexlet.io/#lobby
+    test-data: |
+       Соперник - бот
+       Задача - поиск площади прямоугольника
+       Код - const _ = require("lodash");
+             const R = require("rambda");
+
+            const solution = (width, length) => {
+            return width * length;
+            };
+
+            module.exports = solution;
+    steps:
+      - Нажать "Create a game"
+      - Выбрать сложность игры "1 звезда" в поле "Level"
+      - Нажать "With a bot" в поле "Game Type"
+      - Выбрать продолжительность игры "8 min" в поле "Time control"
+      - Выбрать задачу "rect_area" в поле "Choose task by name or tags"
+      - Нажать "Create battle"
+      - На открывшейся странице игры выбрать язык "NodeJS"
+      - В поле под своим ником вставить код
+      - Нажать "Check solution"
+    expected-result: |
+      Появляется модальное окно с сообщением о том, что пользователь победил
+
+  - summary: |
+      Проверка возможности завершить игру досрочно (сдаться)
+    requirement: |
+      Пользователь должен иметь возможность завершить игру досрочно (сдаться) во время игры с ботом
+    prerequisites: 
+      Пользователь авторизован в приложении
+      Открыта страница https://codebattle.hexlet.io/#lobby
+    test-data: |
+       Соперник - бот
+       Задача - поиск площади прямоугольника
+    steps:
+      - Нажать "Create a game"
+      - Выбрать сложность игры "1 звезда" в поле "Level"
+      - Нажать "With a bot" в поле "Game Type"
+      - Выбрать продолжительность игры "8 min" в поле "Time control"
+      - Выбрать задачу "rect_area" в поле "Choose task by name or tags"
+      - Нажать "Create battle"
+      - На открывшейся странице игры нажать "Сдаться" (красный флажок)
+    expected-result: |
+      Появляется модальное окно с подтверждением решения сдаться, после подтверждения появляется сообщение о том, что пользователь проиграл 
 
   - summary: |
       Проверка выбора минимального уровня сложности игры
@@ -79,6 +150,8 @@
       - Нажать "Create game" 
       - Нажать "Одна звезда" в поле "Level"
       - Нажать "With a bot" в поле "Game Type"
+      - Выбрать продолжительность игры в поле "Time control"
+      - Выбрать задачу в поле "Choose task by name or tags"
       - Нажать "Create battle" 
     expected-result: |
       Игра создана, Пользователь переходит на страницу игры с ботом на минимальном уровне сложности
@@ -95,10 +168,30 @@
     steps:
       - Нажать "Create game"
       - Нажать "With other users" в поле "Game Type"
+      - Выбрать продолжительность игры в поле "Time control"
+      - Выбрать задачу в поле "Choose task by name or tags"
       - Нажать "Create battle"
-      - Нажать "Continue" в поле "Lobby" напротив своего никнейма
     expected-result: |
-      Игра запустится после подтверждения соперником на странице "Waiting for an opponent"
+      На странице https://codebattle.hexlet.io/#lobby во вкладке "Lobby" появится игра с выбранными параметрами от имени пользователя
+
+  - summary: |
+      Проверка создания игры с другом
+    requirement: |
+      Пользователь должен иметь возможность создавать игру с другом
+    prerequisites: 
+      Пользователь авторизован в приложении
+      Открыта страница https://codebattle.hexlet.io/#lobby
+    test-data: |
+      Соперник - любой пользователь онлайн
+    steps:
+      - Нажать "Create game"
+      - Нажать "With a friend" в поле "Game Type"
+      - Выбрать продолжительность игры в поле "Time control"
+      - Выбрать пользователя из выпадающего списка в поле "Choose opponent"
+      - Выбрать задачу в поле "Choose task by name or tags"
+      - Нажать "Create battle"
+    expected-result: |
+      На странице https://codebattle.hexlet.io/#lobby на иконке с двумя скрещенными мечами рядом с ником пользователя появится значок с цифрой "1" при наведении на который появится сообщение "You invited [имя пользователя]"  
 
   - summary: |
       Проверка максимальной продолжительности игры
@@ -113,6 +206,7 @@
       - Нажать "Create a game"
       - Нажать "With a bot" в поле "Game Type"
       - Ползунком выбрать "60 min" в поле "Time control"
+      - Выбрать задачу в поле "Choose task by name or tags"
       - Нажать "Create battle"
     expected-result: |
       Игра создана, Пользователь переходит на страницу игры с ботом, в поле "Timeout in" отображается таймер с обратным отсчетом 60 минут
@@ -204,8 +298,13 @@
        Устройство - iPhone 12
     steps:
       - В Chrome DevTools в панели отображения устройства выбрать iPhone 12
+      - Нажать "Create a game"
+      - Нажать "With a bot" в поле "Game Type"
+      - Выбрать продолжительность игры в поле "Time control"
+      - Выбрать задачу в поле "Choose task by name or tags"
+      - Нажать "Create battle" 
     expected-result: |
-      Отображается мобильная версия сайта
+      Корректно отображается мобильная версия сайта, функционал сайта и созданная игра работают корректно
 
   - summary: |
       Проверка сайта на совместимость с браузером Google Chrome
